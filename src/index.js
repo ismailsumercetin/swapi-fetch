@@ -14,14 +14,13 @@ const dataText = {
   usedStarshipsText: "Used Starships"
 };
 
-(async () => {
-  const loadingNode = document.createElement("p");
-  loadingNode.append(dataText.loadingText);
-  appDiv.appendChild(loadingNode);
-  const data = JSON.parse(await swapi.getData());
-  appDiv.removeChild(loadingNode);
-  populateApp(data);
-})();
+const checkLocalStorage = () => {
+  try {
+    return localStorage.getItem("swapi_data");
+  } catch (error) {
+    return null;
+  }
+};
 
 const createParagraph = (data, personDiv, text) => {
   const node_p = document.createElement("p");
@@ -75,3 +74,19 @@ const populateApp = (data) => {
     appDiv.innerHTML += "<hr />";
   });
 };
+
+(async () => {
+  let data;
+  const loadingNode = document.createElement("p");
+  loadingNode.append(dataText.loadingText);
+  appDiv.appendChild(loadingNode);
+  data = checkLocalStorage();
+
+  if (!data) {
+    data = await swapi.getData();
+    localStorage.setItem("swapi_data", data);
+  }
+
+  appDiv.removeChild(loadingNode);
+  populateApp(JSON.parse(data));
+})();

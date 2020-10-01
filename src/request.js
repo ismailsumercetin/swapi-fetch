@@ -1,4 +1,4 @@
-const NUM_PEOPLE = 15;
+const NUM_PEOPLE = 14;
 
 const getData = async () => {
   const dataArr = [];
